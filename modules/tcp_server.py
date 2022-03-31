@@ -56,9 +56,16 @@ class TcpServer:
         pdot.write_png(f'{output_pic_name}.png')
     
     def __move_to_nearest_incomplete_node(self, origin_node: Node):
-			  
-		# obtain shortest path between origin_node and all 'incomplete_nodes'
-		# (if there's any)
+        """
+        Move the TCP server machine state to the nearest incomplete state from 'origin_node'
+
+        Parameters
+        ----------
+        origin_node : Node
+            The origin node object that all other incomplete nodes distance will be measured from
+        """ 
+        # obtain shortest path between origin_node and all 'incomplete_nodes'
+        # (if there's any)
         incomplete_node_distances = []
         for destination_label in self.incomplete_nodes.keys():
             try:
@@ -69,15 +76,15 @@ class TcpServer:
             incomplete_node_distances.append((shortest_path, len(shortest_path)))
 
         if len(incomplete_node_distances) > 0:
-			
-			# Get the nearest incomplete node and the shortest path the program can take to reach that incomplete node
+            
+            # Get the nearest incomplete node and the shortest path the program can take to reach that incomplete node
             incomplete_node_distances.sort(key=lambda shortest_path: shortest_path[1], reverse=False)
             logging.debug(f'incomplete_node_distances from [{origin_node.label}] is {incomplete_node_distances}')
             nearest_incomplete_node_path = incomplete_node_distances[0][0]
             logging.debug(f'nearest_incomplete_node_path is {nearest_incomplete_node_path}')
 
-			# navigate the server to the next incomplete node by following the calculated
-			# 'nearest_cinomplete_node_path'
+            # navigate the server to the next incomplete node by following the calculated
+            # 'nearest_cinomplete_node_path'
             dest_index = 1
             while dest_index < len(nearest_incomplete_node_path):
                 origin_label = nearest_incomplete_node_path[dest_index - 1]
@@ -89,13 +96,16 @@ class TcpServer:
                 self.send_message(action)
                 dest_index += 1
 
-			# return the next node as a 'Node' object
+            # return the next node as a 'Node' object
             logging.debug(f'moved to {dest_label}')
             return self.incomplete_nodes.get(dest_label)
         else:
             return None
         
     def get_server_structure(self):
+        """
+        Get the entire state machine structure on the server
+        """
         initial_node = Node(self.send_message("1"), self)
         self.graph.add_edge('Z', initial_node.label) 
         self.incomplete_nodes[initial_node.label] = initial_node
