@@ -18,7 +18,7 @@ brew install graphviz
 Please make sure that you have this tool installed on your machine before moving on to the next step
 
 ## Installing Python Dependencies
-Please run this command from the root directory of the project:
+First of all, this instruction **assumes that you have Python 3.8+ installed on your machine**. If you already have it installed, please run this command from the root directory of the project:
 
 ```
 pip install -r requirements.txt
