@@ -1,0 +1,8 @@
+# test directory
+python_test/
+
+# IDE Settings
+.vscode/ 
+
+# cache directories
+__pycache__/
